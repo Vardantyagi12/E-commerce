@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Storefront</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <!-- Header --> 
+    <header class="header">
+        <h1 class="logo">My Store</h1>
+        <div class="status">
+            <span id="wishlist-count"><i class="fa-solid fa-heart" style="color: red;"></i>0</span>
+            <span id="cart-count"><i class="fa-solid fa-cart-shopping"></i> 0</span>
+            <button class="btn checkout-btn" id="checkout-btn">Checkout</button>
+        </div>
+    </header>
+
+    <!-- Filters -->
+    <div class="filters" id="filters">
+        <button class="btn active" data-category="all">All</button>
+        <button class="btn" data-category="men's clothing">Men's Clothing</button>
+        <button class="btn" data-category="women's clothing">Women's Clothing</button>
+        <button class="btn" data-category="electronics">Electronics</button>
+        <button class="btn" data-category="jewelery">Jewelery</button>
+    </div>
+
+    <!-- Products -->
+    <section class="grid" id="product-grid"></section>
+
+    <!--Cart -->
+    <div class="cart-popup" id="cart-popup">
+        <h3>Your Cart</h3>
+        <ul id="cart-items"></ul>
+        <button class="btn checkout-btn" id="fake-checkout">Checkout</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
