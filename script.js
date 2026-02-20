@@ -8,7 +8,7 @@ const filters = document.getElementById("filters");
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
-// ================= LOAD PRODUCTS =================
+//LOAD PRODUCTS
 async function loadProducts(category = "all") {
     let url = "https://fakestoreapi.com/products";
 
@@ -21,7 +21,7 @@ async function loadProducts(category = "all") {
     renderProducts(products);
 }
 
-// ================= RENDER PRODUCTS =================
+//RENDER PRODUCTS
 function renderProducts(products) {
     productGrid.innerHTML = "";
 
@@ -57,7 +57,7 @@ function renderProducts(products) {
     });
 }
 
-// ================= RAZORPAY PAYMENT =================
+//RAZORPAY PAYMENT
 function payNow(product) {
 
     const amountInPaise = Math.round(product.price * 100);
@@ -91,7 +91,7 @@ function payNow(product) {
 }
 
 
-// ================= CART FUNCTIONS =================
+//CART FUNCTIONS
 function addToCart(product) {
     cart.push(product);
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -116,7 +116,7 @@ function updateCart() {
     ).join("");
 }
 
-// ================= WISHLIST =================
+//WISHLIST
 function toggleWishlist(product, btn) {
     if (wishlist.some(w => w.id === product.id)) {
         wishlist = wishlist.filter(w => w.id !== product.id);
@@ -134,7 +134,7 @@ function updateWishlist() {
     wishlistCount.textContent = `❤️ ${wishlist.length}`;
 }
 
-// ================= CART POPUP =================
+//CART POPUP
 function showCart() {
     cartPopup.style.display = "block";
     setTimeout(() => {
@@ -142,7 +142,7 @@ function showCart() {
     }, 3000);
 }
 
-// ================= FILTER =================
+//FILTER
 filters.addEventListener("click", (e) => {
     if (e.target.tagName === "BUTTON") {
         document.querySelectorAll(".filters .btn")
@@ -153,7 +153,7 @@ filters.addEventListener("click", (e) => {
     }
 });
 
-// ================= CART CHECKOUT PAYMENT =================
+//CART CHECKOUT PAYMENT
 document.getElementById("checkout").addEventListener("click", checkoutCart);
 
 function checkoutCart() {
@@ -202,7 +202,8 @@ function checkoutCart() {
 }
 
 
-// ================= INIT =================
+//INIT
 updateCart();
 updateWishlist();
 loadProducts();
+
