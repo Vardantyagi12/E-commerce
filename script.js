@@ -8,9 +8,10 @@ const filters = document.getElementById("filters");
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
-//LOAD PRODUCTS
+// ================= LOAD PRODUCTS =================
 async function loadProducts(category = "all") {
     let url = "https://fakestoreapi.com/products";
+
     if (category !== "all") {
         url = `https://fakestoreapi.com/products/category/${category}`;
     }
@@ -20,7 +21,7 @@ async function loadProducts(category = "all") {
     renderProducts(products);
 }
 
-//RENDER PRODUCTS
+// ================= RENDER PRODUCTS =================
 function renderProducts(products) {
     productGrid.innerHTML = "";
 
@@ -56,34 +57,41 @@ function renderProducts(products) {
     });
 }
 
-//RAZORPAY PAYMENT
+// ================= RAZORPAY PAYMENT =================
 function payNow(product) {
 
+    const amountInPaise = Math.round(product.price * 100);
+
     const options = {
-        key: "YOUR_RAZORPAY_KEY_ID", // 🔴 Replace with your key
-        amount: Math.round(product.price * 100), // amount in paise
+        key: "rzp_live_SIGnvbsZyGWdti",
+        amount: amountInPaise,
         currency: "INR",
         name: "My Store",
         description: product.title,
-        image: product.image,
+
         handler: function (response) {
             alert("Payment Successful ✅\nPayment ID: " + response.razorpay_payment_id);
         },
-        prefill: {
-            name: "Customer",
-            email: "customer@example.com",
-            contact: "9999999999"
-        },
-        theme: {
-            color: "#111"
+
+        modal: {
+            ondismiss: function () {
+                console.log("Payment popup closed");
+            }
         }
     };
 
     const rzp = new Razorpay(options);
+
+    rzp.on("payment.failed", function (response) {
+        console.log(response.error);
+        alert("Payment Failed ❌\nReason: " + response.error.description);
+    });
+
     rzp.open();
 }
 
-//CART FUNCTIONS
+
+// ================= CART FUNCTIONS =================
 function addToCart(product) {
     cart.push(product);
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -108,7 +116,7 @@ function updateCart() {
     ).join("");
 }
 
-//WISHLIST
+// ================= WISHLIST =================
 function toggleWishlist(product, btn) {
     if (wishlist.some(w => w.id === product.id)) {
         wishlist = wishlist.filter(w => w.id !== product.id);
@@ -126,7 +134,7 @@ function updateWishlist() {
     wishlistCount.textContent = `❤️ ${wishlist.length}`;
 }
 
-//CART POPUP
+// ================= CART POPUP =================
 function showCart() {
     cartPopup.style.display = "block";
     setTimeout(() => {
@@ -134,7 +142,7 @@ function showCart() {
     }, 3000);
 }
 
-// FILTER
+// ================= FILTER =================
 filters.addEventListener("click", (e) => {
     if (e.target.tagName === "BUTTON") {
         document.querySelectorAll(".filters .btn")
@@ -145,23 +153,40 @@ filters.addEventListener("click", (e) => {
     }
 });
 
+// ================= CART CHECKOUT PAYMENT =================
+document.getElementById("checkout").addEventListener("click", checkoutCart);
 
-function payNow(product) {
+function checkoutCart() {
+
+    if (cart.length === 0) {
+        alert("Cart is empty ❌");
+        return;
+    }
+
+    // Calculate total
+    const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+
+    const amountInPaise = Math.round(totalAmount * 100);
 
     const options = {
-        key: "YOUR_RAZORPAY_KEY_ID",
-        amount: Math.round(product.price * 100),
+        key: "rzp_live_SIGnvbsZyGWdti", 
+        amount: amountInPaise,
         currency: "INR",
         name: "My Store",
-        description: product.title,
+        description: "Cart Payment",
 
         handler: function (response) {
             alert("Payment Successful ✅\nPayment ID: " + response.razorpay_payment_id);
+
+            // Clear cart after success
+            cart = [];
+            localStorage.setItem("cart", JSON.stringify(cart));
+            updateCart();
         },
 
         modal: {
             ondismiss: function () {
-                alert("Payment popup closed ❌");
+                console.log("Cart payment popup closed");
             }
         }
     };
@@ -177,7 +202,7 @@ function payNow(product) {
 }
 
 
-//INIT 
+// ================= INIT =================
 updateCart();
 updateWishlist();
 loadProducts();
